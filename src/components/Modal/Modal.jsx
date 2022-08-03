@@ -1,39 +1,39 @@
-import React, { Component } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import s from './Modal.module.css';
 
-class Modal extends Component {
-  //Adding listener to track keydown Escape
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleClose);
-  }
-  //Removing listener before unmounting component
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleClose);
-  }
+function Modal({ photo, onCloseModal }) {
+  const modalRef = useRef();
 
-  //Method to close modal on clicking Overlay or pressing Escape
-  handleClose = e => {
-    const { onCloseModal } = this.props;
+  //Adding focus on Overlay div when element mounts
+  useEffect(() => {
+    modalRef.current.focus();
+  }, []);
+
+  //Function to close modal on clicking Overlay or pressing Escape
+  const handleClose = e => {
     if (e.currentTarget === e.target) {
-      onCloseModal('close');
+      onCloseModal();
     }
 
     if (e.code === 'Escape') {
-      onCloseModal('close');
+      onCloseModal();
     }
   };
 
-  render() {
-    const { photo } = this.props;
-    return (
-      <div className={s.Overlay} onClick={this.handleClose}>
-        <div className={s.Modal}>
-          <img src={photo.largeImageURL} alt={photo.tags} />
-        </div>
+  return (
+    <div
+      className={s.Overlay}
+      onClick={handleClose}
+      onKeyDown={handleClose}
+      ref={modalRef}
+      tabIndex="-1"
+    >
+      <div className={s.Modal}>
+        <img src={photo.largeImageURL} alt={photo.tags} />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 Modal.propTypes = {

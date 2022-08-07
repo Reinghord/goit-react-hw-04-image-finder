@@ -12,11 +12,7 @@ function Modal({ photo, onCloseModal }) {
 
   //Function to close modal on clicking Overlay or pressing Escape
   const handleClose = e => {
-    if (e.currentTarget === e.target) {
-      onCloseModal();
-    }
-
-    if (e.code === 'Escape') {
+    if (e.currentTarget === e.target || e.code === 'Escape') {
       onCloseModal();
     }
   };

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import s from './Modal.module.css';
+import { Overlay, ModalWindow } from './Modal.styled';
 
 function Modal({ photo, onCloseModal }) {
   const modalRef = useRef();
@@ -18,17 +18,16 @@ function Modal({ photo, onCloseModal }) {
   };
 
   return (
-    <div
-      className={s.Overlay}
+    <Overlay
       onClick={handleClose}
       onKeyDown={handleClose}
       ref={modalRef}
       tabIndex="-1"
     >
-      <div className={s.Modal}>
+      <ModalWindow>
         <img src={photo.largeImageURL} alt={photo.tags} />
-      </div>
-    </div>
+      </ModalWindow>
+    </Overlay>
   );
 }
 

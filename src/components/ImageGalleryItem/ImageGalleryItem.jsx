@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import s from './ImageGalleryItem.module.css';
+import { Item, Image } from './ImageGalleryItem.styled';
 
 function ImageGalleryItem({ photos, onHandleClick }) {
   //Lifting state up
@@ -9,13 +9,9 @@ function ImageGalleryItem({ photos, onHandleClick }) {
 
   return photos.map(photo => {
     return (
-      <li key={photo.id} className={s.ImageGalleryItem} onClick={handleClick}>
-        <img
-          src={photo.webformatURL}
-          alt={photo.tags}
-          className={s.ImageGalleryItemImage}
-        />
-      </li>
+      <Item key={photo.id} onClick={handleClick}>
+        <Image src={photo.webformatURL} alt={photo.tags} />
+      </Item>
     );
   });
 }

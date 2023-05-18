@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import s from './ImageGallery.module.css';
+import { Gallery } from './ImageGallery.styled';
 
 function ImageGallery({ children }) {
-  return <ul className={s.ImageGallery}>{children}</ul>;
+  return <Gallery>{children}</Gallery>;
 }
 
 ImageGallery.propTypes = { children: PropTypes.element.isRequired };

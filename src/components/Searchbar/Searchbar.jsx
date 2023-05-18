@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import s from './Searchbar.module.css';
+import {
+  Box,
+  SearchForm,
+  Button,
+  SearchFormButtonLabel,
+  SearchFormInput,
+  SearchIcon,
+} from './Searchbar.styled';
 
 function Searchbar({ onSubmit }) {
   const [value, setValue] = useState('');
@@ -19,14 +26,14 @@ function Searchbar({ onSubmit }) {
   };
 
   return (
-    <header className={s.Searchbar}>
-      <form className={s.SearchForm} onSubmit={onHandleSubmit}>
-        <button type="submit" className={s.SearchFormButton}>
-          <span className={s.SearchFormButtonLabel}>Search</span>
-        </button>
+    <Box>
+      <SearchForm onSubmit={onHandleSubmit}>
+        <Button type="submit">
+          <SearchIcon />
+          <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+        </Button>
 
-        <input
-          className={s.SearchFormInput}
+        <SearchFormInput
           type="text"
           name="search"
           value={value}
@@ -35,8 +42,8 @@ function Searchbar({ onSubmit }) {
           placeholder="Search images and photos"
           onChange={onHandleInput}
         />
-      </form>
-    </header>
+      </SearchForm>
+    </Box>
   );
 }
 

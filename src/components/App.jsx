@@ -62,9 +62,8 @@ function App() {
   //Method to determine which picture user clicked
   //Storing clicked image object in state
   //Displaying modal window
-  const onHandleClick = click => {
-    const foundImage = photos.find(photo => photo.tags === click);
-    setClickedImg(foundImage);
+  const onHandleClick = photo => {
+    setClickedImg(photo);
     setShowModal(true);
   };
 

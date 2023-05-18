@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import pixFetch, { resetPage } from 'service/pixabay';
 import { BallTriangle } from 'react-loader-spinner';
 import ImageGallery from './ImageGallery';
@@ -14,38 +14,35 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [clickedImg, setClickedImg] = useState({});
 
+  useEffect(() => {
+    if (status === 'pending') {
+      setStatus('loading');
+      pixFetch(searchQuery)
+        .then(data => onHandleData(data.hits))
+        .catch(error => console.log(error));
+    }
+  }, [searchQuery, status]);
+
   //Method to fetch and render data on search submit
   //It will reset PAGE_COUNTER for fetch
   //Status state changing to pending to show spinner
   const onSubmit = searchValue => {
     resetPage();
     setStatus('pending');
+    setPhotos([]);
     setSearchQuery(searchValue);
-    pixFetch(searchValue)
-      .then(data => onHandleData(data.hits))
-      .catch(error => console.log(error));
+  };
+
+  //Method to fetch data on clicking Load More button
+  //Pagination will continue from submitted query
+  //Status state changing to pending to commence fetch
+  const onLoadMore = () => {
+    setStatus('pending');
   };
 
   //Method to handle data received from search submit
   //Status state changing to loaded to show Load More button
   function onHandleData(data) {
-    setStatus('loaded');
-    setPhotos(data);
-  }
-
-  //Method to fetch data on clicking Load More button
-  //Pagination will continue from submitted query
-  //Status state changing to pending to show spinner
-  const onLoadMore = () => {
-    setStatus('pending');
-    pixFetch(searchQuery)
-      .then(data => onHandleMoreData(data.hits))
-      .catch(error => console.log(error));
-  };
-
-  //Method to handle data received from search submit
-  //Status state changing to loaded to show Load More button
-  function onHandleMoreData(data) {
     setStatus('loaded');
     setPhotos(prevData => [...prevData, ...data]);
   }
@@ -73,7 +70,7 @@ function App() {
         <ImageGalleryItem photos={photos} onHandleClick={onHandleClick} />
       </ImageGallery>
 
-      {status === 'pending' && (
+      {status === 'loading' && (
         <BallTriangle
           height={100}
           width={100}

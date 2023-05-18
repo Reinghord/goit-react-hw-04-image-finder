@@ -6,6 +6,7 @@ import ImageGalleryItem from './ImageGalleryItem';
 import Searchbar from './Searchbar';
 import Button from './Button';
 import Modal from './Modal';
+import { createPortal } from 'react-dom';
 
 function App() {
   const [photos, setPhotos] = useState([]);
@@ -43,8 +44,19 @@ function App() {
   //Method to handle data received from search submit
   //Status state changing to loaded to show Load More button
   function onHandleData(data) {
-    setStatus('loaded');
+    if (data.length === 12) {
+      setStatus('loaded');
+      setPhotos(prevData => [...prevData, ...data]);
+      return;
+    }
+    if (data.length === 0) {
+      setStatus('rejected');
+      setPhotos([]);
+      return;
+    }
+    setStatus('idle');
     setPhotos(prevData => [...prevData, ...data]);
+    return;
   }
 
   //Method to determine which picture user clicked
@@ -85,9 +97,19 @@ function App() {
 
       {status === 'loaded' && <Button onLoadMore={onLoadMore} />}
 
-      {showModal && (
-        <Modal photo={clickedImg} onCloseModal={onCloseModal}></Modal>
+      {status === 'rejected' && (
+        <div>
+          Your generic alert to promt you that there are no images found, but I
+          was too lazy to style it. Hell, at least it removed that "Load More"
+          button from showing
+        </div>
       )}
+
+      {showModal &&
+        createPortal(
+          <Modal Modal photo={clickedImg} onCloseModal={onCloseModal}></Modal>,
+          document.body
+        )}
     </>
   );
 }
